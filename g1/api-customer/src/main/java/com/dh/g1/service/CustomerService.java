@@ -29,8 +29,20 @@ public class CustomerService implements ICustomerService{
 
     @Override
     @Transactional
-    public CustomerDto updateCustomer(CustomerDto customerDto) {
-        return null;
+    public CustomerDto updateCustomer(Customer customer, CustomerDto customerDto) {
+        if(customerDto.getNombre() != null){
+            customer.setNombre(customerDto.getNombre());
+        }
+        if(customerDto.getApellido() != null){
+            customer.setApellido(customerDto.getApellido());
+        }
+        if(customerDto.getGenero() != null){
+            customer.setGenero(customerDto.getGenero());
+        }
+        if(customerDto.getFechaNacimiento() != null){
+            customer.setFechaNacimiento(customerDto.getFechaNacimiento());
+        }
+        return mapper.convertValue(customerRepository.save(customer), CustomerDto.class);
     }
 
     @Override
@@ -47,13 +59,14 @@ public class CustomerService implements ICustomerService{
 
     @Override
     @Transactional
-    public Optional<Customer> readCustomer(Long id) {
-        return Optional.empty();
+    public CustomerDto readCustomer(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        return mapper.convertValue(customer, CustomerDto.class);
     }
 
     @Override
     @Transactional
     public void deleteCustomer(Long id) {
-
+        customerRepository.findById(id);
     }
 }
