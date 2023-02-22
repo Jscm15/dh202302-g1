@@ -32,5 +32,7 @@ public class Customer {
     private String genero;
     @Column
     private LocalDate fechaNacimiento;
+    @Column
+    private Boolean seBorro = false;
 
 }
