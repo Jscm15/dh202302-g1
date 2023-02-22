@@ -29,20 +29,15 @@ public class CustomerService implements ICustomerService{
 
     @Override
     @Transactional
-    public CustomerDto updateCustomer(Customer customer, CustomerDto customerDto) {
-        if(customerDto.getNombre() != null){
-            customer.setNombre(customerDto.getNombre());
-        }
-        if(customerDto.getApellido() != null){
-            customer.setApellido(customerDto.getApellido());
-        }
-        if(customerDto.getGenero() != null){
-            customer.setGenero(customerDto.getGenero());
-        }
-        if(customerDto.getFechaNacimiento() != null){
-            customer.setFechaNacimiento(customerDto.getFechaNacimiento());
-        }
-        return mapper.convertValue(customerRepository.save(customer), CustomerDto.class);
+    public Optional<CustomerDto> updateCustomer(Long id, CustomerDto customerDto) {
+
+        return customerRepository.findById(id).map(customer -> {
+            customer.setNombre(customerDto.getNombre() != null ? customerDto.getNombre() : customer.getNombre());
+            customer.setApellido(customerDto.getApellido() != null ? customerDto.getApellido() : customer.getApellido());
+            customer.setGenero(customerDto.getGenero() != null ? customerDto.getGenero() : customer.getGenero());
+            customer.setFechaNacimiento(customerDto.getFechaNacimiento() != null ? customerDto.getFechaNacimiento() : customer.getFechaNacimiento());
+            return mapper.convertValue(customerRepository.save(customer), CustomerDto.class);
+        });
     }
 
     @Override
@@ -57,16 +52,28 @@ public class CustomerService implements ICustomerService{
         return customerDtos;
     }
 
+    @Transactional
+    public Set<CustomerDto> readCustomerByTypeAndNumber(String tipoDocumento,String nroDocumento) {
+        List<Customer> customers = customerRepository.findByTypeAndNumber(tipoDocumento,nroDocumento);
+        Set<CustomerDto> customerDtos = new HashSet<>();
+
+        for (Customer customer:customers) {
+            customerDtos.add(mapper.convertValue(customer, CustomerDto.class));
+        }
+        return customerDtos;
+    }
+
     @Override
     @Transactional
-    public CustomerDto readCustomer(Long id) {
+    public Optional<CustomerDto> readCustomer(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        return mapper.convertValue(customer, CustomerDto.class);
+
+        return Optional.ofNullable(mapper.convertValue(customer, CustomerDto.class));
     }
 
     @Override
     @Transactional
     public void deleteCustomer(Long id) {
-        customerRepository.findById(id);
+        customerRepository.softDelete(id);
     }
 }
