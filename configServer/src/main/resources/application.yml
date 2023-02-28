@@ -1,0 +1,15 @@
+server:
+  port: ${PORT:8888}
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/jonathanvictoricadh/dh202302-g1-config
+          skipSslValidation: true
+          default-label: main
+          force-pull: true
+          search-paths: configData
