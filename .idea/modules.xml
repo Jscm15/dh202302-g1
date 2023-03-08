@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/api-customer/api-customer.iml" filepath="$PROJECT_DIR$/api-customer/api-customer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-eureka/api-eureka.iml" filepath="$PROJECT_DIR$/api-eureka/api-eureka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-gateway/api-gateway.iml" filepath="$PROJECT_DIR$/api-gateway/api-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-wallet/api-wallet.iml" filepath="$PROJECT_DIR$/api-wallet/api-wallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configServer/configServer.iml" filepath="$PROJECT_DIR$/configServer/configServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/dh202302-g1.iml" filepath="$PROJECT_DIR$/.idea/dh202302-g1.iml" />
     </modules>
   </component>

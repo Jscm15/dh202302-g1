@@ -12,9 +12,9 @@ import java.util.List;
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
     @Modifying
-    @Query(value = "UPDATE db_virtualwallet.customers SET customers.se_borro=true WHERE id = ?", nativeQuery = true)
+    @Query(value = "UPDATE 'dh202302-g2'.customers SET customers.se_borro=true WHERE id = ?", nativeQuery = true)
     void softDelete(Long Id);
 
-    @Query(value = "Select * FROM db_virtualwallet.customers  WHERE customers.tipo_documento = ?1 AND customers.nro_documento = ?2 AND customers.se_borro=false", nativeQuery = true)
+    @Query(value = "Select * FROM 'dh202302-g2'.customers  WHERE customers.tipo_documento = ?1 AND customers.nro_documento = ?2 AND customers.se_borro=false", nativeQuery = true)
     List<Customer> findByTypeAndNumber(String tipoDocumento,String nroDocumento);
 }
