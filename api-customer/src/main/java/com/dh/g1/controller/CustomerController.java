@@ -1,5 +1,6 @@
 package com.dh.g1.controller;
 
+import com.dh.g1.exceptions.CustomerException;
 import com.dh.g1.exceptions.InvalidDataResource;
 import com.dh.g1.exceptions.ResourceNotFoundException;
 import com.dh.g1.model.CustomerDto;
@@ -32,6 +33,10 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.readCustomerByTypeAndNumber(tipoDocumento, nroDocumento));
     }
 
+    @GetMapping("/{doctype}/{docnum}")
+    public Optional<CustomerDto> getCustomer (@PathVariable String doctype, @PathVariable String docnum) throws CustomerException {
+        return customerService.getCustomer(doctype, docnum);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Optional<CustomerDto>> updateCustomer (@PathVariable Long id, @RequestBody CustomerDto customerDto) throws ResourceNotFoundException{

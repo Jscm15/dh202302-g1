@@ -1,5 +1,8 @@
 package com.dh.g1.service;
 
+import com.dh.g1.exceptions.CustomerException;
+import com.dh.g1.exceptions.MessageError;
+import com.dh.g1.exceptions.ResourceNotFoundException;
 import com.dh.g1.model.Customer;
 import com.dh.g1.model.CustomerDto;
 import com.dh.g1.repository.ICustomerRepository;
@@ -68,6 +71,12 @@ public class CustomerService implements ICustomerService{
     public Optional<CustomerDto> readCustomer(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
 
+        return Optional.ofNullable(mapper.convertValue(customer, CustomerDto.class));
+    }
+
+    @Override
+    public Optional<CustomerDto> getCustomer(String tipoDocumento, String nroDocumento) throws CustomerException {
+        Optional<Customer> customer = Optional.ofNullable(customerRepository.findBytipoDocumentoAndnroDocumento(tipoDocumento, nroDocumento).orElseThrow(() -> new CustomerException(MessageError.CUSTOMER_NOT_FOUND)));
         return Optional.ofNullable(mapper.convertValue(customer, CustomerDto.class));
     }
 
