@@ -27,7 +27,7 @@ public class WalletService implements IWalletService{
     @Override
     public void create(Wallet wallet) throws WalletException {
         customerClient.getCustomer(wallet.getTipoDocumento(), wallet.getNroDocumento()).orElseThrow(() -> new WalletException(MessageError.CUSTOMER_NOT_FOUND));
-        if(walletRepository.findBytipoDocumentoAndNroDocumentoAndMoneda_Codigo(wallet.getTipoDocumento(), wallet.getNroDocumento(), wallet.getMoneda().getCodigo()).isPresent()){
+        if(!walletRepository.findBytipoDocumentoAndNroDocumentoAndMoneda_Codigo(wallet.getTipoDocumento(), wallet.getNroDocumento(), wallet.getMoneda().getCodigo()).isPresent()){
             walletRepository.save(wallet);
         };
     }
@@ -36,6 +36,13 @@ public class WalletService implements IWalletService{
     public void updateBalance(WalletDTO walletDTO) throws WalletException {
         Wallet wallet = walletRepository.findById(walletDTO.getId()).orElseThrow(() -> new WalletException(MessageError.WALLET_NOT_FOUND));
         wallet.setBalance(walletDTO.getBalance());
+        walletRepository.save(wallet);
+    }
+
+    @Override
+    public void updateBalance(Long id, Double balance) throws WalletException {
+        Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletException(MessageError.WALLET_NOT_FOUND));
+        wallet.setBalance(balance);
         walletRepository.save(wallet);
     }
 

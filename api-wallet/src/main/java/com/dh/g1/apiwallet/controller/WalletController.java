@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/v1/wallet")
 public class WalletController {
     private final WalletService walletService;
 
@@ -41,5 +42,11 @@ public class WalletController {
     @ResponseStatus(code = HttpStatus.OK)
     public void updateBalance(@RequestBody WalletDTO walletDTO) throws WalletException {
         walletService.updateBalance(walletDTO);
+    }
+
+    @PutMapping("/{id}/{balance}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public void updateBalance(@PathVariable Long id, @PathVariable Double balance) throws WalletException {
+        walletService.updateBalance(id, balance);
     }
 }
