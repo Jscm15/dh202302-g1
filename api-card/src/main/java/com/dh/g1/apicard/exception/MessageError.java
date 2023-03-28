@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MessageError {
+    MARGINS_CALIFICACION("El servicio de calificación está caido, intente más tarde nuevamente"),
     CUSTOMER_WITH_CARD("El cliente no puede tener mas de una tarjeta"),
     CUSTOMER_NOT_HAVE_CARD("El cliente no tiene tarjeta de credito registrada"),
     CUSTOMER_NOT_FOUNDS("El cliente no tiene fondos suficientes");

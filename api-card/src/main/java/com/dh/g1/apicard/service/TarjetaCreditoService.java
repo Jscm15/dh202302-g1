@@ -10,6 +10,7 @@ import com.dh.g1.apicard.model.MovimientosTarjetaCredito;
 import com.dh.g1.apicard.model.TarjetaCredito;
 import com.dh.g1.apicard.repository.IMovimientosTarjetaCreditoRepository;
 import com.dh.g1.apicard.repository.ITarjetaCreditoRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -65,11 +66,13 @@ public class TarjetaCreditoService implements ITarjetaCreditoService{
     }
 
     @Override
+    @CircuitBreaker(name= "calificaciones", fallbackMethod = "crearFallBack")
     public String crear(TarjetaCredito tarjetaCredito) throws CardException {
         if(tarjetaCreditoRepository.findByTipoDocumentoAndNumeroDocumento(tarjetaCredito.getTipoDocumento(), tarjetaCredito.getNumeroDocumento()).isPresent()){
             throw new CardException(MessageError.CUSTOMER_WITH_CARD);
         }
         IMarginServiceClient.Calification calification = marginServiceClient.calculateCalification(tarjetaCredito.getTipoDocumento(), tarjetaCredito.getNumeroDocumento());
+
         BigDecimal totalMarginCard = calification.getSublimits().stream().filter(sublimit -> sublimit.getConcept().name().equals(Concept.CARD)).findFirst().get().getTotalMargin();
         tarjetaCredito.setLimiteCalificado(totalMarginCard);
         tarjetaCredito.setLimiteDisponible(totalMarginCard);
@@ -77,6 +80,11 @@ public class TarjetaCreditoService implements ITarjetaCreditoService{
         tarjetaCreditoRepository.save(tarjetaCredito);
         return tarjetaCredito.getId();
     }
+
+    public String crearFallBack(TarjetaCredito tarjetaCredito, Throwable t) throws CardException {
+        throw new CardException(MessageError.MARGINS_CALIFICACION);
+    }
+
 
     @Override
     public void debitar(MovimientosTarjetaCredito movimiento) throws CardException {

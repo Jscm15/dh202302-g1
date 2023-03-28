@@ -42,7 +42,7 @@ public class TarjetaCreditoController {
  */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String crear(@Valid @RequestBody TarjetaCredito tarjetaCredito) throws CardException {
+    public String crear(@RequestBody TarjetaCredito tarjetaCredito) throws CardException {
         return this.tarjetaCreditoService.crear(tarjetaCredito);
     }
 
