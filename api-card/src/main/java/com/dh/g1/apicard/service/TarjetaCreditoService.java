@@ -11,6 +11,7 @@ import com.dh.g1.apicard.model.TarjetaCredito;
 import com.dh.g1.apicard.repository.IMovimientosTarjetaCreditoRepository;
 import com.dh.g1.apicard.repository.ITarjetaCreditoRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class TarjetaCreditoService implements ITarjetaCreditoService{
 
     private final ITarjetaCreditoRepository tarjetaCreditoRepository;
@@ -82,6 +84,7 @@ public class TarjetaCreditoService implements ITarjetaCreditoService{
     }
 
     public String crearFallBack(TarjetaCredito tarjetaCredito, Throwable t) throws CardException {
+        log.info(t.getMessage());
         throw new CardException(MessageError.MARGINS_CALIFICACION);
     }
 
