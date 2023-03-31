@@ -76,7 +76,7 @@ public class CustomerService implements ICustomerService{
 
     @Override
     public Optional<CustomerDto> getCustomer(String tipoDocumento, String nroDocumento) throws CustomerException {
-        Optional<Customer> customer = Optional.ofNullable(customerRepository.findBytipoDocumentoAndnroDocumento(tipoDocumento, nroDocumento).orElseThrow(() -> new CustomerException(MessageError.CUSTOMER_NOT_FOUND)));
+        Optional<Customer> customer = Optional.ofNullable(customerRepository.findBytipoDocumentoAndNroDocumento(tipoDocumento, nroDocumento).orElseThrow(() -> new CustomerException(MessageError.CUSTOMER_NOT_FOUND)));
         return Optional.ofNullable(mapper.convertValue(customer, CustomerDto.class));
     }
 

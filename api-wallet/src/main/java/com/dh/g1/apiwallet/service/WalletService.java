@@ -27,7 +27,7 @@ public class WalletService implements IWalletService{
     @Override
     public void create(Wallet wallet) throws WalletException {
         customerClient.getCustomer(wallet.getTipoDocumento(), wallet.getNroDocumento()).orElseThrow(() -> new WalletException(MessageError.CUSTOMER_NOT_FOUND));
-        if(!walletRepository.findBytipoDocumentoAndNroDocumentoAndMoneda_Codigo(wallet.getTipoDocumento(), wallet.getNroDocumento(), wallet.getMoneda().getCodigo()).isPresent()){
+        if(!(walletRepository.findBytipoDocumentoAndNroDocumentoAndMoneda_Codigo(wallet.getTipoDocumento(), wallet.getNroDocumento(), wallet.getMoneda().getCodigo()).isPresent())){
             walletRepository.save(wallet);
         };
     }

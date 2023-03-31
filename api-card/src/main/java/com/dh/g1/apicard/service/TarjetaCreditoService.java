@@ -70,17 +70,23 @@ public class TarjetaCreditoService implements ITarjetaCreditoService{
     @Override
     @CircuitBreaker(name= "calificaciones", fallbackMethod = "crearFallBack")
     public String crear(TarjetaCredito tarjetaCredito) throws CardException {
+        BigDecimal totalMarginCard = BigDecimal.valueOf(0.0);
         if(tarjetaCreditoRepository.findByTipoDocumentoAndNumeroDocumento(tarjetaCredito.getTipoDocumento(), tarjetaCredito.getNumeroDocumento()).isPresent()){
             throw new CardException(MessageError.CUSTOMER_WITH_CARD);
         }
         IMarginServiceClient.Calification calification = marginServiceClient.calculateCalification(tarjetaCredito.getTipoDocumento(), tarjetaCredito.getNumeroDocumento());
-
-        BigDecimal totalMarginCard = calification.getSublimits().stream().filter(sublimit -> sublimit.getConcept().name().equals(Concept.CARD)).findFirst().get().getTotalMargin();
+        List<IMarginServiceClient.Calification.Sublimit> sublimits = calification.getSublimits();
+        for (IMarginServiceClient.Calification.Sublimit sublimit : sublimits) {
+            if(sublimit.getConcept().name().toString().equals("CARD")){
+                totalMarginCard = sublimit.getTotalMargin();
+            }
+        }
         tarjetaCredito.setLimiteCalificado(totalMarginCard);
         tarjetaCredito.setLimiteDisponible(totalMarginCard);
         tarjetaCredito.setLimiteConsumido(BigDecimal.ZERO);
         tarjetaCreditoRepository.save(tarjetaCredito);
         return tarjetaCredito.getId();
+
     }
 
     public String crearFallBack(TarjetaCredito tarjetaCredito, Throwable t) throws CardException {

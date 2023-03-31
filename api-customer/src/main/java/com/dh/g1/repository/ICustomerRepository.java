@@ -20,6 +20,6 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Query(value = "Select * FROM 'dh202302-g2'.customers  WHERE customers.tipo_documento = ?1 AND customers.nro_documento = ?2 AND customers.se_borro=false", nativeQuery = true)
     List<Customer> findByTypeAndNumber(String tipoDocumento,String nroDocumento);
 
-    @Query(value = "Select * FROM 'dh202302-g2'.customers  WHERE customers.tipo_documento = ?1 AND customers.nro_documento = ?2 ", nativeQuery = true)
-    Optional<Customer> findBytipoDocumentoAndnroDocumento(String tipoDocumento, String nroDocumento);
+    //@Query(value = "Select * FROM 'dh202302-g2'.customers  WHERE customers.tipo_documento = ?1 AND customers.nro_documento = ?2 ", nativeQuery = true)
+    Optional<Customer> findBytipoDocumentoAndNroDocumento(String tipoDocumento, String nroDocumento);
 }

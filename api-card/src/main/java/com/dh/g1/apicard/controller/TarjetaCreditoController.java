@@ -34,12 +34,12 @@ public class TarjetaCreditoController {
         }
 
 
-
+*/
     @GetMapping("/{tipoDocumento}/{numeroDocumento}")
     public Optional<TarjetaCredito> findByTipoAndNumeroDocumento(@PathVariable String tipoDocumento, @PathVariable String numeroDocumento) throws CardException {
         return tarjetaCreditoService.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento);
     }
- */
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public String crear(@RequestBody TarjetaCredito tarjetaCredito) throws CardException {
