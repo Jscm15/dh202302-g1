@@ -1,8 +1,8 @@
 package com.dh.g1.service;
 
+import com.dh.g1.event.ClienteCreadoEventProducer;
 import com.dh.g1.exceptions.CustomerException;
 import com.dh.g1.exceptions.MessageError;
-import com.dh.g1.exceptions.ResourceNotFoundException;
 import com.dh.g1.model.Customer;
 import com.dh.g1.model.CustomerDto;
 import com.dh.g1.repository.ICustomerRepository;
@@ -19,15 +19,19 @@ public class CustomerService implements ICustomerService{
     private final ICustomerRepository customerRepository;
     private final ObjectMapper mapper;
 
-    public CustomerService(ICustomerRepository customerRepository, ObjectMapper mapper) {
+    private final ClienteCreadoEventProducer clienteCreadoEventProducer;
+
+    public CustomerService(ICustomerRepository customerRepository, ObjectMapper mapper, ClienteCreadoEventProducer clienteCreadoEventProducer) {
         this.customerRepository = customerRepository;
         this.mapper = mapper;
+        this.clienteCreadoEventProducer = clienteCreadoEventProducer;
     }
 
     @Override
     @Transactional
     public void createCustomer(CustomerDto customerDto) {
         customerRepository.save(mapper.convertValue(customerDto,Customer.class));
+        clienteCreadoEventProducer.publishClienteCreadoEvent(new ClienteCreadoEventProducer.Data(customerDto.getTipoDocumento(), customerDto.getNroDocumento()));
     }
 
     @Override
