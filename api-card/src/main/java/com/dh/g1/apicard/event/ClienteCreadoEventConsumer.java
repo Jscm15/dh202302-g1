@@ -36,6 +36,7 @@ public class ClienteCreadoEventConsumer {
                 .numeroTarjeta(new String(String.valueOf(numero)))
                 .tipoDocumento(message.getTipoDocumento())
                 .numeroDocumento(message.getNumeroDocumento())
+                .moneda("ARS")
                 .limiteCalificado(new BigDecimal(0))
                 .limiteConsumido(new BigDecimal(0))
                 .limiteDisponible(new BigDecimal(0))
