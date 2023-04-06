@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     public static final String EXCHANGE_NAME = "backendExchange";
     public static final String TOPIC_CLIENTE_CREADO = "com.dh.backend.clientecreado";
-    public static final String QUEUE_CLIENTE_CREADO = "queueClienteCreado";
+    public static final String QUEUE_CLIENTE_CREADO = "queueClienteCreadoCard";
 
     @Bean
     public TopicExchange appExchange() {

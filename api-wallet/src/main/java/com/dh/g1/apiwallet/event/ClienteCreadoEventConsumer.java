@@ -4,6 +4,7 @@ import com.dh.g1.apiwallet.config.RabbitMQConfig;
 import com.dh.g1.apiwallet.exception.WalletException;
 import com.dh.g1.apiwallet.model.Moneda;
 import com.dh.g1.apiwallet.model.Wallet;
+import com.dh.g1.apiwallet.repository.MonedaRepository;
 import com.dh.g1.apiwallet.service.WalletService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +18,11 @@ public class ClienteCreadoEventConsumer {
 
     private final WalletService walletService;
 
-    public ClienteCreadoEventConsumer(WalletService walletService) {
+    private  final MonedaRepository monedaRepository;
+
+    public ClienteCreadoEventConsumer(WalletService walletService, MonedaRepository monedaRepository) {
         this.walletService = walletService;
+        this.monedaRepository = monedaRepository;
     }
 
     //suscripción a cola de mensajes
@@ -27,14 +31,19 @@ public class ClienteCreadoEventConsumer {
         System.out.println("Tipo Documento :"+ message.getTipoDocumento());
         System.out.println("Numero Documento :"+ message.getNumeroDocumento());
 
-        Moneda moneda = Moneda.builder()
-                .codigo("ARS")
-                .descripcion("Pesos")
-                .build();
+        if(monedaRepository.findById("ARS").isEmpty()){
+            Moneda moneda = Moneda.builder()
+                    .codigo("ARS")
+                    .descripcion("Pesos")
+                    .build();
+            monedaRepository.save(moneda);
+        }
+
+
         Wallet wallet = Wallet.builder()
                 .tipoDocumento(message.getTipoDocumento())
                 .nroDocumento(message.getNumeroDocumento())
-                .moneda(moneda)
+                .moneda(Moneda.builder().codigo("ARS").build())
                 .balance(0.0)
                 .build();
         walletService.create(wallet);

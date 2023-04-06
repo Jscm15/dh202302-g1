@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/vi/apiCard/tarjeta")
+@RequestMapping("/api/v1/apiCard/tarjeta")
 public class TarjetaCreditoController {
 
     private final TarjetaCreditoService tarjetaCreditoService;
